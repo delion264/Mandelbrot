@@ -6,35 +6,13 @@ This program produces an image of the Mandelbrot set */
 #include <math.h>
 #include <stdint.h>
 
-#define MAX_ITERATIONS 128 /* Will be 65535 in final version */
-#define WIDTH 600          /* Image width in pixels */
-#define HEIGHT 400         /* Image height in pixels */
+#define MAX_ITERATIONS 65535 /* Will be 65535 in final version */
+#define WIDTH 150            /* Image width in pixels */
+#define HEIGHT 60            /* Image height in pixels */
 #define XMIN -1
 #define XMAX 1
 #define YMIN -1.5
 #define YMAX 1.5
-
-int main(int argc, char *argv[])
-{
-    int i, j;    /* Iterate over pixels */
-    double a, b; /* Complex coordinates that correspond to pixel divisions */
-    double xInterval = (XMAX - XMIN) / WIDTH;
-    double yInterval = (YMAX - YMIN) / HEIGHT;
-
-    for (i = 0; i < WIDTH / xInterval; i++)
-    {
-        for (j = 0; j < HEIGHT / yInterval; j++)
-        {
-            int s = mandelbrot(XMIN + i * xInterval, YMIN + j * yInterval);
-            if (s = MAX_ITERATIONS)
-            {
-                printf("*");
-            }
-        }
-    }
-
-    return EXIT_SUCCESS;
-}
 
 /* Escape time algorithm */
 int mandelbrot(double x, double y)
@@ -46,11 +24,11 @@ int mandelbrot(double x, double y)
     double mag = 0; /* Magnitude of vector in complex space */
     int k = 0;      /* Iteration counter */
 
-    while (k < MAX_ITERATIONS && mag < 2)
+    while (k < MAX_ITERATIONS && mag < 4)
     {
         z2_re = u * u - v * v;
         z2_im = 2 * u * v;
-        mag = sqrt(pow(z2_re, 2) + pow(z2_im, 2));
+        mag = z2_re * z2_re + z2_im * z2_im;
 
         if (z2_re == x && z2_im == y)
         {
@@ -61,4 +39,25 @@ int mandelbrot(double x, double y)
         k++;
     }
     return k;
+}
+
+int main(int argc, char *argv[])
+{
+    int i, j; /* Iterate over pixels */
+    double xInterval = (XMAX - XMIN) / WIDTH;
+    double yInterval = (YMAX - YMIN) / HEIGHT;
+
+    for (i = 0; i < WIDTH / xInterval; i++)
+    {
+        for (j = 0; j < HEIGHT / yInterval; j++)
+        {
+            int s = mandelbrot(XMIN + i * xInterval, YMIN + j * yInterval);
+            if (s == MAX_ITERATIONS)
+            {
+                printf("*");
+            }
+        }
+    }
+
+    return EXIT_SUCCESS;
 }
