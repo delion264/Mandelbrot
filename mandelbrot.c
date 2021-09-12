@@ -18,7 +18,7 @@ This program produces an image of the Mandelbrot set */
     Carries out the iteration z_k+1 = (z_k)^2 + c
     u and v are Re(z_k) and Im(z_k) respectively
     x and y are Re(c) and Im(c) respectively */
-int mandelbrot(double u, double v, double x, double y, int k)
+int mandelbrot(double u, double v, double x, double y)
 {
     double z2_re = u * u - v * v; /* Calculate Re((z_k)^2) and Im((z_k)^2) */
     double z2_im = 2 * u * v;
@@ -27,7 +27,7 @@ int mandelbrot(double u, double v, double x, double y, int k)
     double mag = fz_re + fz_im; /* Magnitude squared of z_k+1 */
     int i = 0;
 
-    while (mag <= 2)
+    while (mag <= 2 && i < MAX_ITERATIONS)
     {
         u = z2_re;
         v = z2_im;
@@ -45,7 +45,21 @@ int mandelbrot(double u, double v, double x, double y, int k)
 
 int main(int argc, char *argv[])
 {
-    //int i, j;
+    double i, j;
 
+    for (i = XMIN; i <= XMAX; i += ((XMAX - XMIN) / WIDTH))
+    {
+        for (j = XMIN; j <= XMAX; j += ((XMAX - XMIN) / WIDTH))
+        {
+            if (mandelbrot(0, 0, i, j) == MAX_ITERATIONS)
+            {
+                printf("*");
+            }
+            else
+            {
+                printf("\n");
+            }
+        }
+    }
     return EXIT_SUCCESS;
 }
