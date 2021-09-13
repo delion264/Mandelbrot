@@ -6,13 +6,13 @@ This program produces an image of the Mandelbrot set */
 #include <math.h>
 #include <stdint.h>
 
-#define MAX_ITERATIONS 32 /* Will be 65535 in final version */
-#define WIDTH 160         /* Image width in pixels */
-#define HEIGHT 40         /* Image height in pixels */
-#define XMIN -1
+#define MAX_ITERATIONS 65535 /* Will be 65535 in final version */
+#define WIDTH 160            /* Image width in pixels */
+#define HEIGHT 40            /* Image height in pixels */
+#define XMIN -2
 #define XMAX 1
-#define YMIN -1.5
-#define YMAX 1.5
+#define YMIN -1
+#define YMAX 1
 
 /*  Escape time algorithm
     Carries out the iteration z_k+1 = (z_k)^2 + c
@@ -27,10 +27,10 @@ int mandelbrot(double u, double v, double x, double y)
     double mag = fz_re + fz_im; /* Magnitude squared of z_k+1 */
     int i = 0;
 
-    while (mag <= 2 && i < MAX_ITERATIONS)
+    while (mag <= 4 && i < MAX_ITERATIONS)
     {
-        u = z2_re;
-        v = z2_im;
+        u = fz_re;
+        v = fz_im;
         z2_re = u * u - v * v;
         z2_im = 2 * u * v;
         fz_re = z2_re + x;
@@ -46,10 +46,9 @@ int mandelbrot(double u, double v, double x, double y)
 int main(int argc, char *argv[])
 {
     double i, j;
-
-    for (i = XMIN; i <= XMAX; i += ((XMAX - XMIN) / WIDTH))
+    for (j = YMIN; j <= YMAX; j += 0.025)
     {
-        for (j = XMIN; j <= XMAX; j += ((XMAX - XMIN) / WIDTH))
+        for (i = XMIN; i <= XMAX; i += 0.025)
         {
             if (mandelbrot(0, 0, i, j) == MAX_ITERATIONS)
             {
@@ -57,9 +56,11 @@ int main(int argc, char *argv[])
             }
             else
             {
-                printf("\n");
+                printf(" ");
             }
         }
+        printf("\n");
     }
+
     return EXIT_SUCCESS;
 }
